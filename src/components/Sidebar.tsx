@@ -1,30 +1,25 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Product } from '../hooks/useProducts';
 
 export function Sidebar() {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<string[]>([]);
 
     useEffect(() => {
-        fetch('https://fakestoreapi.com/products?limit=10')
+        fetch('https://fakestoreapi.com/products/categories')
             .then((res) => res.json())
-            .then(setProducts);
+            .then(setCategories);
     }, []);
 
     return (
-        <aside className="fixed top-0 left-0 h-full bg-gradient-to-b from-blue-700 to-blue-400 shadow-xl z-40 transition-transform md:relative md:translate-x-0 w-64 p-0">
-            <div className="flex items-center gap-2 px-6 py-6">
-                <span className="text-white font-extrabold text-2xl tracking-tight">FakeStore</span>
-            </div>
-            <nav className="flex flex-col gap-4 p-4 overflow-y-auto">
-                {products.map((product) => (
+        <aside className="fixed left-0 mt-16 h-screen bg-gradient-to-b from-primary to-pink-200 shadow-xl z-40 transition-transform md:relative md:translate-x-0 w-52 p-0">
+            <nav className="flex flex-col gap-3 p-4 overflow-y-auto h-full">
+                {categories.map((cat) => (
                     <Link
-                        key={product.id}
-                        href={`/products/${product.id}`}
-                        className="flex items-center gap-3 bg-white/80 hover:bg-white transition rounded-lg p-2 shadow-sm"
+                        key={cat}
+                        href={`/category/${encodeURIComponent(cat)}`}
+                        className="bg-white/80 hover:bg-white transition rounded-lg p-2 shadow-sm text-primary font-medium capitalize"
                     >
-                        <img src={product.image} alt={product.title} className="w-10 h-10 object-contain rounded bg-gray-100" />
-                        <span className="text-sm font-medium text-blue-900 truncate">{product.title}</span>
+                        {cat}
                     </Link>
                 ))}
             </nav>

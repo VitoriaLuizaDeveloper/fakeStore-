@@ -1,4 +1,5 @@
 import { Product } from '../hooks/useProducts';
+import { useAuth } from '../hooks/useAuth';
 
 interface ProductListProps {
     products: Product[];
@@ -8,26 +9,29 @@ interface ProductListProps {
 }
 
 export function ProductList({ products, onView, onEdit, onDelete }: ProductListProps) {
+    const { isAdmin } = useAuth();
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
             {products.map((product) => (
                 <div
                     key={product.id}
-                    className="bg-white rounded-2xl shadow-lg p-6 flex flex-col transition-transform hover:-translate-y-1 hover:shadow-2xl border border-gray-100"
+                    onClick={() => onView(product.id!)}
+                    className="bg-white rounded-2xl shadow-lg p-4 flex flex-col border border-gray-100 cursor-pointer hover:shadow-2xl transition min-h-[320px] group"
                 >
                     <img
                         src={product.image}
                         alt={product.title}
-                        className="h-40 object-contain mb-4 rounded-lg bg-gray-50"
+                        className="h-32 object-contain mb-3 rounded-lg bg-gray-50 group-hover:scale-105 transition"
                     />
-                    <h2 className="font-bold text-lg mb-1 text-blue-900 truncate">{product.title}</h2>
-                    <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">{product.category}</p>
-                    <p className="font-semibold mb-4 text-blue-700">R$ {product.price}</p>
-                    <div className="flex gap-2 mt-auto">
-                        <button className="px-4 py-1 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 transition" onClick={() => onView(product.id!)}>Ver</button>
-                        <button className="px-4 py-1 rounded-lg bg-yellow-400 text-yellow-900 font-medium hover:bg-yellow-500 transition" onClick={() => onEdit(product.id!)}>Editar</button>
-                        <button className="px-4 py-1 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600 transition" onClick={() => onDelete(product.id!)}>Excluir</button>
-                    </div>
+                    <h2 className="font-bold text-lg mb-1 text-primary truncate text-center">{product.title}</h2>
+                    <p className="text-xs text-gray-400 mb-1 uppercase tracking-wide text-center">{product.category}</p>
+                    <p className="font-semibold mb-2 text-primary text-center">${product.price}</p>
+                    {isAdmin() && (
+                        <div className="flex gap-2 mt-auto pt-2 justify-center">
+                            <button className="px-4 py-1 rounded-lg bg-yellow-400 text-yellow-900 font-medium hover:bg-yellow-500 transition" onClick={e => { e.stopPropagation(); onEdit(product.id!); }}>Edit</button>
+                            <button className="px-4 py-1 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600 transition" onClick={e => { e.stopPropagation(); onDelete(product.id!); }}>Delete</button>
+                        </div>
+                    )}
                 </div>
             ))}
         </div>

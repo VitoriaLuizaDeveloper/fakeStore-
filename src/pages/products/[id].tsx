@@ -5,7 +5,7 @@ import { ProductCard } from '../../components/ProductCard';
 import { ProductForm } from '../../components/ProductForm';
 import { Loader } from '../../components/Loader';
 import { Feedback } from '../../components/Feedback';
-import { Sidebar } from '../../components/Sidebar';
+import { Header } from '../../components/Header';
 
 export default function ProductDetail() {
     const router = useRouter();
@@ -25,7 +25,7 @@ export default function ProductDetail() {
         if (!id) return;
         const updated = await updateProduct(Number(id), data);
         if (updated) {
-            setSuccess('Produto atualizado com sucesso!');
+            setSuccess('Product updated successfully!');
             setProduct(updated);
             setTimeout(() => setSuccess(''), 2000);
             router.replace(`/products/${id}`);
@@ -35,19 +35,19 @@ export default function ProductDetail() {
     if (loading || !product) return <Loader />;
 
     return (
-        <div className="flex">
-            <Sidebar />
-            <main className="flex-1 p-6 ml-64">
+        <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-pink-100">
+            <Header />
+            <main className="flex-1 p-6 md:p-12 max-w-2xl mx-auto w-full pt-20 mt-16">
                 {error && <Feedback message={error} type="error" />}
                 {success && <Feedback message={success} type="success" />}
                 {edit ? (
                     <div>
-                        <h1 className="text-2xl font-bold mb-4">Editar Produto</h1>
+                        <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
                         <ProductForm initialData={product} onSubmit={handleUpdate} loading={loading} />
                     </div>
                 ) : (
                     <div>
-                        <h1 className="text-2xl font-bold mb-4">Detalhes do Produto</h1>
+                        <h1 className="text-2xl font-bold mb-4">Product Details</h1>
                         <ProductCard product={product} />
                     </div>
                 )}
