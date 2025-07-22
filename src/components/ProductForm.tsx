@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Product } from '../hooks/useProducts';
+import { useAuth } from '../hooks/useAuth';
 
 interface ProductFormProps {
     initialData?: Product;
@@ -11,8 +12,16 @@ export function ProductForm({ initialData, onSubmit, loading }: ProductFormProps
     const [form, setForm] = useState<Product>(
         initialData || { title: '', price: 0, description: '', category: '', image: '' }
     );
+    const [categories, setCategories] = useState<string[]>([]);
+    const { isAdmin } = useAuth();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    useEffect(() => {
+        fetch('https://fakestoreapi.com/products/categories')
+            .then((res) => res.json())
+            .then(setCategories);
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
@@ -27,8 +36,8 @@ export function ProductForm({ initialData, onSubmit, loading }: ProductFormProps
                 name="title"
                 value={form.title}
                 onChange={handleChange}
-                placeholder="Título"
-                className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-lg"
+                placeholder="Title"
+                className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
                 required
             />
             <input
@@ -36,36 +45,45 @@ export function ProductForm({ initialData, onSubmit, loading }: ProductFormProps
                 type="number"
                 value={form.price}
                 onChange={handleChange}
-                placeholder="Preço"
-                className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-lg"
+                placeholder="Price"
+                className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
                 required
             />
-            <input
+            <div className="flex gap-4 items-center">
+                <input
+                    name="image"
+                    value={form.image}
+                    onChange={handleChange}
+                    placeholder="Image URL"
+                    className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
+                    required
+                />
+                {form.image && (
+                    <img src={form.image} alt="Preview" className="w-20 h-20 object-contain rounded border border-gray-200 bg-gray-50" />
+                )}
+            </div>
+            <select
                 name="category"
                 value={form.category}
                 onChange={handleChange}
-                placeholder="Categoria"
-                className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-lg"
+                className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
                 required
-            />
-            <input
-                name="image"
-                value={form.image}
-                onChange={handleChange}
-                placeholder="URL da imagem"
-                className="input input-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-lg"
-                required
-            />
+            >
+                <option value="" disabled>Select category</option>
+                {categories.map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                ))}
+            </select>
             <textarea
                 name="description"
                 value={form.description}
                 onChange={handleChange}
-                placeholder="Descrição"
-                className="textarea textarea-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-lg min-h-[100px]"
+                placeholder="Description"
+                className="textarea textarea-bordered w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg min-h-[100px]"
                 required
             />
-            <button type="submit" className="w-full py-3 rounded-lg bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition" disabled={loading}>
-                {loading ? 'Salvando...' : 'Salvar'}
+            <button type="submit" className="w-full py-3 rounded-lg bg-primary text-white font-bold text-lg hover:bg-primary/90 transition" disabled={loading}>
+                {loading ? 'Saving...' : 'Save'}
             </button>
         </form>
     );

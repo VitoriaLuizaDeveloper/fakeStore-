@@ -48,7 +48,7 @@ export default function Home() {
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-pink-100 overflow-x-hidden">
       <Header />
       <Sidebar />
-      <main className="flex-1 p-4 md:p-8 ml-0 max-w-7xl mx-auto w-full pt-20 mt-16">
+      <main className="flex-1 p-4 md:p-8 ml-0 w-full pt-20 mt-16">
         <h1 className="text-3xl font-extrabold mb-8 text-primary">Products</h1>
         {error && <Feedback message={error} type="error" />}
         {loading ? (

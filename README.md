@@ -5,7 +5,8 @@ Aplicação web em Next.js + TypeScript para gerenciamento de produtos usando a 
 ## Funcionalidades
 - Listagem de produtos
 - Visualização de detalhes
-- Criação, edição e exclusão de produtos
+- Criação de novo produto
+- **Edição e exclusão de produtos só são permitidas para usuários logados (admin)**
 - Tela de login fake (e-mail: admin@admin.com, senha: 123456)
 - Sidebar responsiva
 - Layout responsivo (mobile e desktop)
@@ -34,13 +35,6 @@ Acesse: http://localhost:3000
 ## Deploy
 
 Se publicado, o link estará aqui: [Seu Deploy na Vercel](https://vercel.com/)
-
-## Testes
-
-Para rodar os testes (se implementados):
-```bash
-npm run test
-```
 
 ---
 

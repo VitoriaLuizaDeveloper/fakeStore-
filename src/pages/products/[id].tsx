@@ -6,13 +6,15 @@ import { ProductForm } from '../../components/ProductForm';
 import { Loader } from '../../components/Loader';
 import { Feedback } from '../../components/Feedback';
 import { Header } from '../../components/Header';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function ProductDetail() {
     const router = useRouter();
     const { id, edit } = router.query;
-    const { fetchProduct, updateProduct, loading, error } = useProducts();
+    const { fetchProduct, updateProduct, deleteProduct, loading, error } = useProducts();
     const [product, setProduct] = useState<Product | null>(null);
     const [success, setSuccess] = useState('');
+    const { isAdmin } = useAuth();
 
     useEffect(() => {
         if (id) {
@@ -32,6 +34,18 @@ export default function ProductDetail() {
         }
     };
 
+    const handleEdit = () => {
+        router.replace(`/products/${id}?edit=1`);
+    };
+
+    const handleDelete = async () => {
+        if (!id) return;
+        if (confirm('Are you sure you want to delete this product?')) {
+            await deleteProduct(Number(id));
+            router.push('/');
+        }
+    };
+
     if (loading || !product) return <Loader />;
 
     return (
@@ -42,13 +56,13 @@ export default function ProductDetail() {
                 {success && <Feedback message={success} type="success" />}
                 {edit ? (
                     <div>
-                        <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
+                        <h1 className="text-2xl font-bold mb-4 text-center">Edit Product</h1>
                         <ProductForm initialData={product} onSubmit={handleUpdate} loading={loading} />
                     </div>
                 ) : (
                     <div>
-                        <h1 className="text-2xl font-bold mb-4">Product Details</h1>
-                        <ProductCard product={product} />
+                        <h1 className="text-2xl font-bold mb-4 text-center">Product Details</h1>
+                        <ProductCard product={product} onEdit={isAdmin() ? handleEdit : undefined} onDelete={isAdmin() ? handleDelete : undefined} />
                     </div>
                 )}
             </main>

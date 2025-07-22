@@ -3,9 +3,12 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../hooks/useAuth';
 import { Feedback } from '../components/Feedback';
 
+const ADMIN_EMAIL = 'admin@admin.com';
+const ADMIN_PASSWORD = '123456';
+
 export default function Login() {
     const { isAuthenticated, error, login } = useAuth();
-    const [form, setForm] = useState({ email: '', password: '' });
+    const [form, setForm] = useState({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
     const [success, setSuccess] = useState('');
     const router = useRouter();
 
@@ -16,8 +19,8 @@ export default function Login() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (login(form.email, form.password)) {
-            setSuccess('Login successful!');
-            setTimeout(() => router.push('/'), 1500);
+            setSuccess('Login successful! Redirecting...');
+            setTimeout(() => router.push('/'), 1000);
         }
     };
 

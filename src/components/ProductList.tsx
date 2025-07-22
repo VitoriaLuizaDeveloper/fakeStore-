@@ -16,7 +16,11 @@ export function ProductList({ products, onView, onEdit, onDelete }: ProductListP
                 <div
                     key={product.id}
                     onClick={() => onView(product.id!)}
-                    className="bg-white rounded-2xl shadow-lg p-4 flex flex-col border border-gray-100 cursor-pointer hover:shadow-2xl transition min-h-[320px] group"
+                    className="bg-white rounded-2xl shadow-lg p-4 flex flex-col border border-gray-100 group transition hover:shadow-2xl hover:cursor-pointer"
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`View product ${product.title}`}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onView(product.id!); }}
                 >
                     <img
                         src={product.image}
@@ -28,8 +32,22 @@ export function ProductList({ products, onView, onEdit, onDelete }: ProductListP
                     <p className="font-semibold mb-2 text-primary text-center">${product.price}</p>
                     {isAdmin() && (
                         <div className="flex gap-2 mt-auto pt-2 justify-center">
-                            <button className="px-4 py-1 rounded-lg bg-yellow-400 text-yellow-900 font-medium hover:bg-yellow-500 transition" onClick={e => { e.stopPropagation(); onEdit(product.id!); }}>Edit</button>
-                            <button className="px-4 py-1 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600 transition" onClick={e => { e.stopPropagation(); onDelete(product.id!); }}>Delete</button>
+                            <button
+                                className="px-4 py-1 rounded-lg bg-yellow-400 text-yellow-900 font-medium hover:bg-yellow-500 transition"
+                                onClick={e => { e.stopPropagation(); onEdit(product.id!); }}
+                                tabIndex={0}
+                                aria-label={`Edit product ${product.title}`}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                className="px-4 py-1 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600 transition"
+                                onClick={e => { e.stopPropagation(); onDelete(product.id!); }}
+                                tabIndex={0}
+                                aria-label={`Delete product ${product.title}`}
+                            >
+                                Delete
+                            </button>
                         </div>
                     )}
                 </div>

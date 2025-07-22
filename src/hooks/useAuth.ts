@@ -9,32 +9,49 @@ export function useAuth() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsAuthenticated(token === FAKE_JWT);
+        if (typeof window !== 'undefined') {
+            const token = sessionStorage.getItem('token');
+            setIsAuthenticated(token === FAKE_JWT);
+        }
     }, []);
 
     const login = (email: string, password: string) => {
         if (email === FAKE_EMAIL && password === FAKE_PASSWORD) {
-            localStorage.setItem('token', FAKE_JWT);
+            if (typeof window !== 'undefined') {
+                sessionStorage.setItem('token', FAKE_JWT);
+            }
             setIsAuthenticated(true);
             setError(null);
             return true;
         } else {
-            setError('E-mail ou senha inválidos');
+            setError('E-mail or password invalid');
             setIsAuthenticated(false);
             return false;
         }
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('token');
+        }
         setIsAuthenticated(false);
         setError(null);
     };
 
-    const isAdmin = () => {
-        return localStorage.getItem('token') === FAKE_JWT;
+    // SSR-safe: use only in client components
+    const useIsAdmin = () => {
+        const [isAdmin, setIsAdmin] = useState(false);
+        useEffect(() => {
+            const token = sessionStorage.getItem('token');
+            setIsAdmin(token === FAKE_JWT);
+        }, []);
+        return isAdmin;
     };
 
-    return { isAuthenticated, error, login, logout, isAdmin };
+    const isAdmin = () => {
+        if (typeof window === 'undefined') return false;
+        return sessionStorage.getItem('token') === FAKE_JWT;
+    };
+
+    return { isAuthenticated, error, login, logout, isAdmin, useIsAdmin };
 } 
