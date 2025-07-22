@@ -34,7 +34,7 @@ Acesse: http://localhost:3000
 
 ## Deploy
 
-Se publicado, o link estará aqui: https://fake-store-five-rho.vercel.app/
+Publicado: https://fake-store-five-rho.vercel.app/
 
 ---
 
