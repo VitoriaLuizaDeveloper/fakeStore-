@@ -16,34 +16,31 @@ export function Sidebar() {
     }, []);
 
     return (
-        <>
+        <div className="shadow-xl min-h-screen md:bg-gradient-to-b md:from-primary md:to-pink-200">
             <button
                 className="fixed top-20 left-2 z-50 p-2 bg-primary text-white rounded-full shadow md:hidden"
                 onClick={() => setOpen(true)}
                 aria-label="Open sidebar"
                 style={{ display: open ? 'none' : undefined }}
             >
-                {/* Seta → */}
                 <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
             </button>
 
-            {/* Sidebar */}
             <aside
-                className={`fixed left-0 mt-16 h-screen bg-gradient-to-b from-primary to-pink-200 shadow-xl z-40 w-52 p-0 transition-transform duration-300
-        ${open ? 'translate-x-0' : '-translate-x-full'}
-        md:translate-x-0 md:static md:block`}
-                style={{ minHeight: 'calc(100vh - 4rem)' }}
+                className={`fixed left-0 mt-16 h-screen z-40 w-52 p-0 transition-transform duration-300
+            ${open ? 'translate-x-0' : '-translate-x-full'}
+            md:translate-x-0 md:static md:block
+            bg-gradient-to-b from-primary to-pink-200 md:bg-none`}
             >
-                {/* Botão para fechar em mobile */}
                 <button
                     className="absolute top-4 right-4 md:hidden bg-white text-primary rounded-full p-1 shadow"
                     onClick={() => setOpen(false)}
                     aria-label="Close sidebar"
                     style={{ display: open ? undefined : 'none' }}
                 >
-                    {/* Seta ← */}
                     <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
                 </button>
+
                 <nav className="flex flex-col gap-3 p-4 overflow-y-auto h-full min-h-0 pt-20 md:pt-8">
                     {isAdmin && (
                         <Link
@@ -64,6 +61,7 @@ export function Sidebar() {
                     ))}
                 </nav>
             </aside>
-        </>
+        </div>
+
     );
 } 
