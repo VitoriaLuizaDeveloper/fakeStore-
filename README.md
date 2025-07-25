@@ -17,7 +17,6 @@ Aplicação web em Next.js + TypeScript para gerenciamento de produtos usando a 
 - Next.js
 - TypeScript
 - Tailwind CSS
-- shadcn-ui
 - React Hooks
 
 ## Como rodar localmente
